@@ -24,13 +24,13 @@ THE SOFTWARE.
 
 #include <ArtnetESP8266.h>
 
-ArtnetESP2866::ArtnetESP2866() {}
+ArtnetESP8266::ArtnetESP8266() {}
 
-void ArtnetESP2866::begin() {
+void ArtnetESP8266::begin() {
   Udp.begin(ART_NET_PORT);
 }
 
-uint16_t ArtnetESP2866::read() {
+uint16_t ArtnetESP8266::read() {
   packetSize = Udp.parsePacket();
   
   if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0) { 
@@ -61,7 +61,7 @@ uint16_t ArtnetESP2866::read() {
   }
 }
 
-void ArtnetESP2866::printPacketHeader() {
+void ArtnetESP8266::printPacketHeader() {
   Serial.print("packet size = ");
   Serial.print(packetSize);
   Serial.print("\topcode = ");
@@ -74,7 +74,7 @@ void ArtnetESP2866::printPacketHeader() {
   Serial.println(sequence);
 }
 
-void ArtnetESP2866::printPacketContent() {
+void ArtnetESP8266::printPacketContent() {
   for (uint16_t i = ART_DMX_START; i < dmxDataLength; i++) {
     Serial.print(artnetPacket[i], DEC);
     Serial.print("  ");

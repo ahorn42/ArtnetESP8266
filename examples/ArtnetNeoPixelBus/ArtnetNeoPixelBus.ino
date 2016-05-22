@@ -6,8 +6,8 @@
  *  server_ip is the IP address of the ESP8266 module, will be 
  *  printed to Serial when the module is connected.
  */
-
-#include <Artnet.h>
+ 
+#include <ArtnetESP8266.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <NeoPixelBus.h>
@@ -20,7 +20,7 @@ NeoPixelBus<NeoGrbFeature, NeoEsp8266BitBang800KbpsMethod> strip(NEO_PIXEL_COUNT
 const char* ssid = "your-ssid";
 const char* password = "your-wifi-password";
 
-Artnet artnet;
+ArtnetESP8266 artnet;
 
 void setColor(RgbColor color) {
   int i;
