@@ -26,31 +26,25 @@ THE SOFTWARE.
 
 Artnet::Artnet() {}
 
-void Artnet::begin(byte mac[], byte ip[])
-{
-  Ethernet.begin(mac,ip);
+void Artnet::begin() {
   Udp.begin(ART_NET_PORT);
 }
 
-uint16_t Artnet::read()
-{
+uint16_t Artnet::read() {
   packetSize = Udp.parsePacket();
   
-  if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
-  { 
+  if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0) { 
       Udp.read(artnetPacket, MAX_BUFFER_ARTNET);
 
       // Check that packetID is "Art-Net" else ignore
-      for (byte i = 0 ; i < 9 ; i++)
-      {
+      for (byte i = 0; i < 9; i++) {
         if (artnetPacket[i] != ART_NET_ID[i])
           return 0;
       }
         
       opcode = artnetPacket[8] | artnetPacket[9] << 8; 
 
-      if (opcode == ART_DMX)
-      {
+      if (opcode == ART_DMX) {
         sequence = artnetPacket[12];
         incomingUniverse = artnetPacket[14] | artnetPacket[15] << 8;  
         dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
@@ -58,19 +52,16 @@ uint16_t Artnet::read()
         if (artDmxCallback) (*artDmxCallback)(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
         return ART_DMX;
       }
-      if (opcode == ART_POLL)
-      {
+      
+      if (opcode == ART_POLL) {
         return ART_POLL; 
       }
-  }
-  else
-  {
+  } else {
     return 0;
   }
 }
 
-void Artnet::printPacketHeader()
-{
+void Artnet::printPacketHeader() {
   Serial.print("packet size = ");
   Serial.print(packetSize);
   Serial.print("\topcode = ");
@@ -83,9 +74,8 @@ void Artnet::printPacketHeader()
   Serial.println(sequence);
 }
 
-void Artnet::printPacketContent()
-{
-  for (uint16_t i = ART_DMX_START ; i < dmxDataLength ; i++){
+void Artnet::printPacketContent() {
+  for (uint16_t i = ART_DMX_START; i < dmxDataLength; i++) {
     Serial.print(artnetPacket[i], DEC);
     Serial.print("  ");
   }

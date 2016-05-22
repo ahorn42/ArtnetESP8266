@@ -26,8 +26,7 @@ THE SOFTWARE.
 #define ARTNET_H
 
 #include <Arduino.h>
-#include <Ethernet.h>
-#include <EthernetUdp.h>
+#include <WiFiUdp.h>
 
 // UDP specific
 #define ART_NET_PORT 6454
@@ -40,49 +39,42 @@ THE SOFTWARE.
 #define ART_NET_ID "Art-Net\0"
 #define ART_DMX_START 18
 
-class Artnet
-{
+class Artnet {
 public:
   Artnet();
 
-  void begin(byte mac[], byte ip[]);
+  void begin();
   uint16_t read();
   void printPacketHeader();
   void printPacketContent();
 
   // Return a pointer to the start of the DMX data
-  inline uint8_t* getDmxFrame(void)
-  {
+  inline uint8_t* getDmxFrame(void) {
     return artnetPacket + ART_DMX_START;
   }
 
-  inline uint16_t getOpcode(void)
-  {
+  inline uint16_t getOpcode(void) {
     return opcode;
   }
 
-  inline uint8_t getSequence(void)
-  {
+  inline uint8_t getSequence(void) {
     return sequence;
   }
 
-  inline uint16_t getUniverse(void)
-  {
+  inline uint16_t getUniverse(void) {
     return incomingUniverse;
   }
 
-  inline uint16_t getLength(void)
-  {
+  inline uint16_t getLength(void) {
     return dmxDataLength;
   } 
 
-  inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)) 
-  {
+  inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)) {
     artDmxCallback = fptr;
   }
 
 private:
-  EthernetUDP Udp;
+  WiFiUDP Udp;
   
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
   uint16_t packetSize;
